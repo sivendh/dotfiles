@@ -1,0 +1,6 @@
+#!/bin/bash
+
+
+terminal="${TERMINAL:-alacritty}"
+
+exec setsid uwsm-app -- "$terminal" -e "$@"
