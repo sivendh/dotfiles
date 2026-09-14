@@ -1,1 +1,1 @@
-#  lauch webapp and tui (omarchy inspired) 
+#  launch webapp and tui (omarchy inspired) 
