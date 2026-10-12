@@ -13,3 +13,10 @@ hl.monitor({
     position  = "0x0",
     scale     = "1",
 })
+
+--hl.monitor({
+--    output    = MONITOR2,
+--    mode      = "1360x768@60",
+--    position  = "0x0",
+--    scale     = "1",
+--})
