@@ -13,8 +13,12 @@ require("config.monitors")
 require("config.windowrules")
 require("config.workspaces")
 
-
-
-
 -- For Noctalia Color templates
 require("noctalia").apply_theme()
+
+---my
+hl.config({
+	layout = {
+		single_window_aspect_ratio = { 1, 1 },
+	},
+})
