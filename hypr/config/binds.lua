@@ -13,6 +13,30 @@ hl.bind(mainMod .. "+ ALT  + F", hl.dsp.window.fullscreen({ mode = 1 }))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen())
 hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
 
+-- Toggle PiP-style sticky window (float + resize to 1:1 square + pin to all workspaces)
+hl.bind(mainMod .. " + O", function()
+	local win = hl.get_active_window()
+	if not win then return end
+
+	if win.pinned then
+		-- Undo PiP: unpin first, then unfloat back to tiled
+		hl.dispatch(hl.dsp.window.pin())
+		hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+	else
+		-- Make PiP: float, resize to small 1:1 square, then pin
+		hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+		hl.dispatch(hl.dsp.window.resize({ x = 1920, y = 1080, exact = true })) -- full 1920x1080 PiP size
+		hl.dispatch(hl.dsp.window.pin())
+	end
+end)
+
+-- Resize active window width (Super + = to widen, Super + - to shrink)
+hl.bind(mainMod .. " + equal", hl.dsp.window.resize({ x = 40, y = 0, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + minus", hl.dsp.window.resize({ x = -40, y = 0, relative = true }), { repeating = true })
+-- Resize active window height (Super + Shift + = to grow, Super + Shift + - to shrink)
+hl.bind(mainMod .. " + SHIFT + equal", hl.dsp.window.resize({ x = 0, y = 40, relative = true }), { repeating = true })
+hl.bind(mainMod .. " + SHIFT + minus", hl.dsp.window.resize({ x = 0, y = -40, relative = true }), { repeating = true })
+
 -- Change focus
 hl.bind(mainMod .. " + Left", hl.dsp.focus({ direction = "left" }))
 hl.bind(mainMod .. " + Right", hl.dsp.focus({ direction = "right" }))
@@ -45,8 +69,8 @@ end
 for i = 1, NUM_WPM do
 	local key = i % 10
 	hl.bind(mainMod .. " + SHIFT + " .. key, function()
-		hl.dispatch(hl.dsp.window.move({ workspace = i }))
-		hl.dispatch(hl.dsp.focus({ workspace = i }))
+		hl.dispatch(hl.dsp.window.move({ workspace = "m~" .. i })) -- move to Nth workspace on current monitor (relative)
+		hl.dispatch(hl.dsp.focus({ workspace = "m~" .. i })) -- follow focus to that same relative workspace
 	end)
 end
 
@@ -158,7 +182,7 @@ hl.bind(mainMod .. " + CONTROL + B", hl.dsp.exec_cmd(noctCall .. "panel-toggle c
 -- Absolute
 for i = 1, NUM_WPM do
 	local key = i % 10
-	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
+	hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = "m~" .. i })) -- m~N = Nth workspace on focused monitor (relative, not absolute)
 end
 -- Relative
 for i = 1, NUM_WPM do
